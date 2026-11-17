@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="QCM interactif de 100 questions sur le chapitre nucléaire.">
+<title>QCM – Chapitre nucléaire | Prof Hamza El Issaoui</title>
+<style>
+:root{--navy:#10233f;--blue:#1769aa;--cyan:#eaf5ff;--green:#168653;--red:#c43d4d;--ink:#182536;--muted:#64748b;--line:#dce5ef;--paper:#fff;--bg:#f3f6fb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+header{background:linear-gradient(125deg,#10233f,#1769aa);color:#fff;padding:30px 18px 26px;text-align:center}
+header .tag{display:inline-block;border:1px solid #ffffff70;border-radius:30px;padding:5px 13px;font-size:.82rem;letter-spacing:.04em}
+header h1{margin:12px 0 5px;font-size:clamp(1.6rem,4vw,2.4rem)}
+header p{margin:4px 0;color:#e5efff}
+main{max-width:900px;margin:24px auto;padding:0 16px 40px}
+.panel,.quiz-card,.result-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px #10233f0b}
+.panel{padding:18px 20px;margin-bottom:18px}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.progress-track{height:9px;background:#e7edf5;border-radius:20px;overflow:hidden;margin:12px 0 5px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#1769aa,#28a4c7);transition:width .25s}
+.quiz-card{padding:clamp(18px,4vw,30px)}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.qnumber{font-weight:700;color:var(--blue);font-size:.92rem}
+.topic{font-size:.78rem;background:var(--cyan);color:#15558c;padding:5px 10px;border-radius:30px}
+.question{font-size:1.22rem;font-weight:700;margin:0 0 20px}
+.answers{display:grid;gap:11px}
+.answer{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);padding:13px 14px;border-radius:11px;cursor:pointer;transition:.15s;background:#fff}
+.answer:hover{border-color:#77add7;background:#f8fbff}
+.answer input{margin-top:4px;accent-color:var(--blue);transform:scale(1.12)}
+.answer.selected{border-color:var(--blue);background:#eef7ff}
+.answer.correct{border-color:var(--green);background:#edfaf3}
+.answer.wrong{border-color:var(--red);background:#fff1f2}
+.feedback{margin-top:16px;padding:13px 15px;border-radius:10px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:#edfaf3;color:#12683f}
+.feedback.bad{background:#fff1f2;color:#a32c3a}
+.controls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:22px}
+button{border:0;border-radius:10px;padding:11px 18px;font-size:.95rem;font-weight:700;cursor:pointer}
+button:disabled{opacity:.42;cursor:not-allowed}
+.primary{background:var(--blue);color:#fff}
+.secondary{background:#e9eff6;color:#26384d}
+.finish{background:var(--green);color:#fff}
+.small-note{font-size:.88rem;color:var(--muted);margin-top:12px}
+#result{display:none;margin-top:18px}
+.result-card{padding:24px}
+.score{font-size:2.5rem;font-weight:800;color:var(--blue);margin:6px 0}
+.review{border-top:1px solid var(--line);padding:13px 0}
+.review strong{display:block;margin-bottom:5px}
+.review .ok{color:var(--green)}.review .no{color:var(--red)}
+footer{text-align:center;color:var(--muted);font-size:.83rem;padding:20px}
+@media(max-width:560px){.controls button{flex:1}.question{font-size:1.08rem}}
+</style>
+</head>
+<body>
+<header>
+  <span class="tag">PHYSIQUE-CHIMIE · 2BAC</span>
+  <h1>CHAPITRE NUCLÉAIRE</h1>
+  <p>QCM interactif – 100 questions</p>
+  <p><strong>Professeur : Hamza El Issaoui</strong></p>
+</header>
+<main>
+  <section class="panel">
+    <div class="meta"><span id="progressText">Question 1 sur 100</span><span id="scoreText">Score : 0 / 100</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="meta"><span>Choisissez une seule réponse par question.</span><span>Une correction avec explication est proposée.</span></div>
+  </section>
+  <section class="quiz-card" id="quiz">
+    <div class="qtop"><span class="qnumber" id="qnumber">QUESTION 01 / 100</span><span class="topic">NUCLÉAIRE</span></div>
+    <h2 class="question" id="question"></h2>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+    <div class="controls">
+      <button class="secondary" id="prevBtn" type="button">← Précédent</button>
+      <button class="primary" id="checkBtn" type="button">Valider la réponse</button>
+      <button class="primary" id="nextBtn" type="button">Suivant →</button>
+    </div>
+    <p class="small-note">Astuce : prenez le temps de lire les quatre propositions avant de valider.</p>
+  </section>
+  <section id="result">
+    <div class="result-card">
+      <h2>Résultat du QCM</h2>
+      <div class="score" id="finalScore">0 / 100</div>
+      <p id="resultMessage"></p>
+      <div class="controls">
+        <button class="primary" id="reviewBtn" type="button">Voir la correction détaillée</button>
+        <button class="secondary" id="restartBtn" type="button">Recommencer le QCM</button>
+      </div>
+      <div id="reviewList" style="display:none;margin-top:18px"></div>
+    </div>
+  </section>
+</main>
+<footer>QCM pédagogique préparé à partir des pages 6 à 8 du cours fourni.</footer>
+<script>
+const questions = [{"q": "Dans la notation nucléaire ^A_ZX, que représente A ?", "o": ["Le nombre de protons", "Le nombre de nucléons", "Le nombre de neutrons", "La charge électrique"], "a": 1, "e": "A est le nombre de nucléons du noyau."}, {"q": "Dans la notation ^A_ZX, que représente Z ?", "o": ["Le numéro atomique", "Le nombre de nucléons", "La masse du noyau", "Le nombre de photons"], "a": 0, "e": "Z est le numéro atomique, c’est-à-dire le nombre de protons."}, {"q": "Quelle relation donne le nombre de neutrons N ?", "o": ["N=A+Z", "N=Z−A", "N=A−Z", "N=A×Z"], "a": 2, "e": "Le cours donne N = A − Z."}, {"q": "Deux isotopes ont :", "o": ["Le même A et des Z différents", "Le même Z et des A différents", "Le même nombre de neutrons", "Des noyaux identiques"], "a": 1, "e": "Les isotopes ont le même nombre de protons mais des nombres de neutrons différents."}, {"q": "La radioactivité est une transformation :", "o": ["Artificielle et prévisible", "Naturelle, spontanée et imprévisible", "Toujours provoquée par un neutron", "Chimique uniquement"], "a": 1, "e": "C’est la définition donnée dans le cours."}, {"q": "Un noyau radioactif est un noyau :", "o": ["Stable", "Instable", "Sans nucléons", "Toujours neutre"], "a": 1, "e": "La radioactivité concerne la transformation spontanée d’un noyau instable."}, {"q": "Lors d’une réaction nucléaire, les lois de Soddy imposent la conservation :", "o": ["De A seulement", "De Z seulement", "De A et de Z", "De la température et de la pression"], "a": 2, "e": "Le nombre de nucléons A et le nombre de charge Z se conservent."}, {"q": "Dans une désintégration alpha, la particule émise est :", "o": ["Un électron", "Un positron", "Un noyau d’hélium ^4_2He", "Un neutron"], "a": 2, "e": "La particule alpha est un noyau d’hélium 4."}, {"q": "Lors d’une désintégration alpha, le nombre de masse du noyau fils :", "o": ["Augmente de 4", "Diminue de 4", "Ne change pas", "Diminue de 2"], "a": 1, "e": "La relation est A' = A − 4."}, {"q": "Lors d’une désintégration alpha, le numéro atomique du noyau fils :", "o": ["Diminue de 2", "Augmente de 2", "Diminue de 4", "Ne change pas"], "a": 0, "e": "La relation est Z' = Z − 2."}, {"q": "Lors d’une désintégration β−, la particule émise est :", "o": ["Un positron", "Un électron", "Un noyau d’hélium", "Un photon visible"], "a": 1, "e": "Le cours associe β− à l’émission d’un électron."}, {"q": "Lors d’une désintégration β−, le nombre de masse A :", "o": ["Augmente de 1", "Diminue de 1", "Reste constant", "Diminue de 4"], "a": 2, "e": "La relation indiquée conserve A."}, {"q": "Lors d’une désintégration β−, le numéro atomique Z du noyau fils :", "o": ["Diminue de 1", "Augmente de 1", "Diminue de 2", "Reste constant"], "a": 1, "e": "La relation est Z' = Z + 1."}, {"q": "Lors d’une désintégration β+, la particule émise est :", "o": ["Un électron", "Un positron", "Un neutron", "Une particule alpha"], "a": 1, "e": "La radioactivité β+ émet un positron."}, {"q": "Lors d’une désintégration β+, le nombre de masse A :", "o": ["Reste constant", "Augmente de 1", "Diminue de 2", "Diminue de 4"], "a": 0, "e": "La relation β+ conserve A."}, {"q": "Lors d’une désintégration β+, le numéro atomique Z du noyau fils :", "o": ["Augmente de 1", "Diminue de 1", "Reste constant", "Diminue de 4"], "a": 1, "e": "La relation est Z' = Z − 1."}, {"q": "Le rayonnement gamma γ est :", "o": ["Une particule alpha", "Un électron", "Un rayonnement électromagnétique", "Un noyau d’hélium"], "a": 2, "e": "Le noyau excité se désexcite en émettant un rayonnement électromagnétique γ."}, {"q": "L’émission gamma accompagne généralement :", "o": ["La désexcitation d’un noyau excité", "La fusion de molécules", "La formation d’un isotope stable par réaction chimique", "La disparition des nucléons"], "a": 0, "e": "Le noyau issu d’une désintégration peut être excité puis émettre γ."}, {"q": "Une famille radioactive est :", "o": ["Un ensemble d’atomes d’un même élément chimique seulement", "Une suite de nucléides issus d’un même noyau père jusqu’à un noyau stable", "Un groupe de noyaux ayant tous le même A", "Une collection de photons"], "a": 1, "e": "C’est la définition de la famille radioactive."}, {"q": "Le noyau père est :", "o": ["Le noyau stable final", "Le noyau initial à l’origine d’une famille radioactive", "La particule alpha", "Le noyau qui ne contient aucun neutron"], "a": 1, "e": "Les nucléides de la famille descendent d’un même noyau père."}, {"q": "La loi de décroissance du nombre de noyaux est :", "o": ["N(t)=N0e^(−λt)", "N(t)=N0+λt", "N(t)=λ/N0", "N(t)=N0e^(λt)"], "a": 0, "e": "La décroissance radioactive suit N(t)=N0e^(−λt)."}, {"q": "Dans N(t)=N0e^(−λt), N0 représente :", "o": ["Le nombre de noyaux à l’instant t", "Le nombre initial de noyaux à t=0", "La constante de temps", "L’activité finale"], "a": 1, "e": "N0 est le nombre de noyaux à t = 0 s."}, {"q": "Dans la loi de décroissance, λ désigne :", "o": ["La longueur d’onde", "La constante radioactive", "La masse volumique", "La demi-vie"], "a": 1, "e": "λ est la constante radioactive."}, {"q": "Dans N(t), la variable t représente :", "o": ["La température", "Le temps", "Le numéro atomique", "L’énergie de liaison"], "a": 1, "e": "N(t) est le nombre de noyaux à l’instant t."}, {"q": "La masse radioactive évolue selon :", "o": ["m=m0e^(−λt)", "m=m0+λt", "m=λt", "m=m0e^(λt)"], "a": 0, "e": "Le cours indique m=m0e^(−λt)."}, {"q": "Le nombre de noyaux radioactifs n évolue selon :", "o": ["n=n0e^(λt)", "n=n0−t", "n=n0e^(−λt)", "n=λ/n0"], "a": 2, "e": "Le cours donne n=n0e^(−λt)."}, {"q": "La demi-vie t1/2 est la durée au bout de laquelle :", "o": ["Tous les noyaux ont disparu", "Le nombre de noyaux est divisé par deux", "L’activité devient nulle", "La masse double"], "a": 1, "e": "Après une demi-vie, le nombre de noyaux radioactifs est divisé par deux."}, {"q": "La constante de temps τ est égale à :", "o": ["λ", "1/λ", "λ²", "ln λ"], "a": 1, "e": "Le cours donne τ = 1/λ."}, {"q": "La relation entre demi-vie et constante radioactive est :", "o": ["t1/2=λ ln2", "t1/2=ln2/λ", "t1/2=λ/ln2", "t1/2=1+λ"], "a": 1, "e": "t1/2 = ln 2 / λ."}, {"q": "La relation entre demi-vie et constante de temps est :", "o": ["t1/2=τ ln2", "t1/2=τ/ln2", "t1/2=2τ", "t1/2=1/τ"], "a": 0, "e": "Le cours donne t1/2 = τ ln 2."}, {"q": "L’activité d’une source radioactive mesure :", "o": ["La masse du noyau", "Le nombre moyen de désintégrations par unité de temps", "Le nombre de protons", "La température de la source"], "a": 1, "e": "C’est la définition de l’activité."}, {"q": "L’unité SI usuelle de l’activité radioactive est :", "o": ["Le joule", "Le becquerel", "Le kilogramme", "Le wattheure"], "a": 1, "e": "L’activité s’exprime en becquerels (Bq)."}, {"q": "Un becquerel correspond à :", "o": ["Une désintégration par minute", "Une désintégration par seconde", "Mille désintégrations par seconde", "Une désintégration par heure"], "a": 1, "e": "1 Bq correspond à une désintégration par seconde."}, {"q": "L’expression de l’activité est :", "o": ["a(t)=λN(t)", "a(t)=N(t)/λ", "a(t)=λ+N(t)", "a(t)=−λ/N(t)"], "a": 0, "e": "Le cours indique a(t)=−dN/dt=λN(t)."}, {"q": "La relation différentielle de l’activité est :", "o": ["a=dN/dt", "a=−dN/dt", "a=d²N/dt²", "a=N×t"], "a": 1, "e": "L’activité est l’opposé de la dérivée du nombre de noyaux."}, {"q": "La loi de décroissance de l’activité est :", "o": ["a(t)=a0e^(−λt)", "a(t)=a0+λt", "a(t)=λe^(t)", "a(t)=a0e^(λt)"], "a": 0, "e": "L’activité suit la même loi exponentielle de décroissance."}, {"q": "Dans a(t)=a0e^(−λt), a0 est :", "o": ["L’activité à t=0", "L’activité à la demi-vie", "La constante radioactive", "Le nombre de nucléons"], "a": 0, "e": "a0 est l’activité initiale."}, {"q": "Quand le temps augmente, l’activité d’une source radioactive :", "o": ["Augmente exponentiellement", "Décroît", "Reste toujours constante", "Change de signe"], "a": 1, "e": "La loi exponentielle avec −λt décrit une décroissance."}, {"q": "Après une demi-vie, le nombre de noyaux restants vaut :", "o": ["N0", "N0/2", "N0/4", "2N0"], "a": 1, "e": "Par définition, la demi-vie divise le nombre de noyaux par deux."}, {"q": "Après deux demi-vies, le nombre de noyaux restants vaut :", "o": ["N0/2", "N0/3", "N0/4", "N0/8"], "a": 2, "e": "Chaque demi-vie divise par deux : N0/2 puis N0/4."}, {"q": "Après trois demi-vies, la fraction restante est :", "o": ["1/2", "1/4", "1/6", "1/8"], "a": 3, "e": "Après trois divisions successives par deux, il reste N0/8."}, {"q": "Si λ augmente, la constante de temps τ=1/λ :", "o": ["Augmente", "Diminue", "Ne change pas", "Devient égale à λ²"], "a": 1, "e": "τ est inversement proportionnelle à λ."}, {"q": "Si λ augmente, la demi-vie t1/2=ln2/λ :", "o": ["Augmente", "Diminue", "Reste constante", "Devient nulle pour toute valeur"], "a": 1, "e": "La demi-vie est inversement proportionnelle à λ."}, {"q": "Pour déterminer l’âge d’un matériau mort par le carbone 14, on compare :", "o": ["Sa température à celle de l’air", "Son activité à celle d’un matériau vivant de même nature", "Sa masse à celle d’un proton", "Son volume à celui d’un isotope"], "a": 1, "e": "Le cours compare a(t) de l’échantillon mort à a0 d’un matériau vivant."}, {"q": "Après la mort d’un être vivant, le carbone 14 :", "o": ["Continue à être renouvelé", "N’est plus renouvelé et décroît", "Se transforme entièrement en carbone 12 instantanément", "Augmente spontanément"], "a": 1, "e": "Le carbone 14 n’est plus renouvelé et sa quantité décroît."}, {"q": "La formule de datation au carbone 14 est :", "o": ["t=(1/λ) ln(a0/a(t))", "t=λ ln(a0/a(t))", "t=a0/(λa(t))", "t=λa(t)/a0"], "a": 0, "e": "On isole t dans a(t)=a0e^(−λt)."}, {"q": "Dans la formule de datation, a(t) désigne :", "o": ["L’activité du matériau mort à l’instant de mesure", "L’activité du matériau vivant", "La constante radioactive", "L’activité à l’origine des temps"], "a": 0, "e": "a(t) est l’activité mesurée de l’échantillon mort."}, {"q": "Dans la datation au carbone 14, a0 représente :", "o": ["L’activité d’un matériau vivant de même nature", "L’activité nulle", "La masse initiale", "Le nombre de neutrons"], "a": 0, "e": "Le cours utilise l’activité d’un même matériau vivant comme référence."}, {"q": "Quelle propriété mathématique est correcte ?", "o": ["e^0=0", "e^0=1", "ln(1)=1", "e^1=0"], "a": 1, "e": "Le cours rappelle e^0=1 et ln 1=0."}, {"q": "Quelle identité est correcte ?", "o": ["e^(a+b)=e^a+e^b", "e^(a+b)=e^a×e^b", "e^(a+b)=e^(a−b)", "e^(a+b)=ab"], "a": 1, "e": "L’exponentielle transforme une somme en produit."}, {"q": "Quelle identité est correcte ?", "o": ["ln(ab)=ln a+ln b", "ln(ab)=ln a×ln b", "ln(ab)=ln(a+b)", "ln(ab)=ln a−ln b"], "a": 0, "e": "Le logarithme d’un produit est la somme des logarithmes."}, {"q": "Quelle identité est correcte ?", "o": ["ln(a/b)=ln a+ln b", "ln(a/b)=ln a−ln b", "ln(a/b)=b ln a", "ln(a/b)=ln b−ln a"], "a": 1, "e": "Le logarithme d’un quotient est la différence des logarithmes."}, {"q": "La dérivée de e^u par rapport à x est :", "o": ["e^u", "u'e^u", "u/e^u", "e^(u')"], "a": 1, "e": "Le cours donne d(e^u)/dx = u'e^u."}, {"q": "La dérivée de ln u par rapport à x est :", "o": ["u'/u", "u×u'", "1/u'", "ln(u')"], "a": 0, "e": "Le cours donne d(ln u)/dx = u'/u."}, {"q": "La célérité de la lumière dans le vide est :", "o": ["3×10^6 m/s", "3×10^8 m/s", "1,6×10^−27 m/s", "9,31×10^2 m/s"], "a": 1, "e": "La valeur donnée est c=3×10^8 m/s."}, {"q": "La relation d’Einstein au repos est :", "o": ["E=mc", "E=mc²", "E=m/c²", "E=c²/m"], "a": 1, "e": "L’énergie au repos est E=mc²."}, {"q": "Dans E=mc², m représente :", "o": ["La masse", "La charge", "La demi-vie", "Le nombre de nucléons"], "a": 0, "e": "m est la masse de la particule."}, {"q": "Dans E=mc², c représente :", "o": ["La constante radioactive", "La célérité de la lumière dans le vide", "La capacité électrique", "La vitesse du noyau dans un milieu"], "a": 1, "e": "c est la célérité de la lumière dans le vide."}, {"q": "Une unité de masse atomique vaut approximativement :", "o": ["1,6×10^−27 kg", "1,6×10^−13 kg", "3×10^8 kg", "931,5 kg"], "a": 0, "e": "Le cours indique 1 u ≈ 1,6×10^−27 kg."}, {"q": "Un MeV correspond à :", "o": ["10^3 eV", "10^6 eV", "10^9 eV", "10^−6 eV"], "a": 1, "e": "1 MeV = 10^6 eV."}, {"q": "Selon le cours, 1 MeV vaut en joules :", "o": ["1,6×10^−13 J", "1,6×10^−27 J", "3×10^8 J", "931,5 J"], "a": 0, "e": "Le cours donne 1 MeV = 1,6×10^−13 J."}, {"q": "La relation pratique entre u et MeV est :", "o": ["1u=931,5 MeV.c^−2", "1u=931,5 MeV.c²", "1u=1,6×10^8 MeV", "1u=3 MeV"], "a": 0, "e": "C’est la conversion rappelée dans le cours."}, {"q": "Le défaut de masse Δm est la différence entre :", "o": ["La masse du noyau et celle d’un électron", "La somme des masses des nucléons séparés et la masse du noyau", "La masse du proton et celle du neutron", "La masse initiale et la masse finale d’un atome chimique"], "a": 1, "e": "Δm = Zmp + (A−Z)mn − m(noyau)."}, {"q": "La formule du défaut de masse est :", "o": ["Δm=Zmp+(A−Z)mn−m(noyau)", "Δm=Zmp−(A−Z)mn", "Δm=A+Z", "Δm=m(noyau)−Z"], "a": 0, "e": "On additionne les masses des protons et neutrons séparés puis on soustrait la masse du noyau."}, {"q": "Dans la formule du défaut de masse, mp est :", "o": ["La masse du proton", "La masse du photon", "La masse du noyau", "La masse du positron"], "a": 0, "e": "mp désigne la masse d’un proton."}, {"q": "Dans la formule du défaut de masse, mn est :", "o": ["La masse du neutron", "La masse du noyau", "La masse de l’électron", "La masse atomique unifiée"], "a": 0, "e": "mn désigne la masse d’un neutron."}, {"q": "Le nombre de protons dans un noyau est :", "o": ["A−Z", "Z", "A+Z", "A"], "a": 1, "e": "Le numéro atomique Z donne le nombre de protons."}, {"q": "Le nombre de neutrons dans un noyau est :", "o": ["Z", "A", "A−Z", "A×Z"], "a": 2, "e": "Le nombre de neutrons est N=A−Z."}, {"q": "L’énergie de liaison d’un noyau est l’énergie nécessaire pour :", "o": ["Créer un électron", "Dissocier le noyau en nucléons séparés", "Accélérer le noyau dans le vide", "Changer sa température"], "a": 1, "e": "C’est l’énergie que le milieu extérieur doit fournir pour séparer les nucléons."}, {"q": "L’énergie de liaison est donnée par :", "o": ["El=Δm/c²", "El=Δm×c²", "El=Δm+c", "El=c/Δm"], "a": 1, "e": "Le cours donne El=Δm.c²."}, {"q": "L’énergie de liaison par nucléon ξ est :", "o": ["ξ=A/El", "ξ=El/A", "ξ=El×A", "ξ=Δm×A"], "a": 1, "e": "On divise l’énergie de liaison par le nombre de nucléons A."}, {"q": "Dans ξ=El/A, A représente :", "o": ["Le numéro atomique", "Le nombre de nucléons", "L’activité", "La masse du proton"], "a": 1, "e": "A est le nombre total de nucléons."}, {"q": "Un noyau est d’autant plus stable que son énergie de liaison par nucléon est :", "o": ["Plus petite", "Plus grande", "Nulle", "Négative obligatoirement"], "a": 1, "e": "Le cours relie une grande énergie de liaison par nucléon à une meilleure stabilité."}, {"q": "La fusion nucléaire consiste à :", "o": ["Casser un noyau lourd", "Unir deux noyaux légers pour former un noyau lourd", "Émettre seulement un photon", "Séparer les électrons"], "a": 1, "e": "C’est la définition de la fusion."}, {"q": "La fission nucléaire consiste à :", "o": ["Unir deux noyaux légers", "Briser un noyau lourd en noyaux plus légers", "Transformer un proton en électron uniquement", "Dissocier une molécule"], "a": 1, "e": "La fission divise un noyau lourd en deux noyaux plus légers."}, {"q": "Dans la définition de la fission du cours, le noyau lourd est brisé par :", "o": ["Un neutron lent", "Un photon visible", "Un électron rapide", "Un noyau d’hélium"], "a": 0, "e": "Le cours précise qu’un neutron lent (thermique) provoque la fission décrite."}, {"q": "La fusion et la fission sont des réactions :", "o": ["Toujours naturelles et spontanées", "Nucléaires provoquées", "Chimiques", "Sans échange d’énergie"], "a": 1, "e": "Le cours précise que fusion et fission sont des réactions nucléaires provoquées."}, {"q": "L’exemple de fusion donné dans le cours associe :", "o": ["Deux noyaux légers d’hydrogène", "Deux noyaux d’uranium", "Un proton et un électron", "Deux noyaux de fer"], "a": 0, "e": "L’exemple est ³₁H + ²₁H → ⁴₂He + ¹₀n."}, {"q": "Dans l’exemple de fusion du cours, un produit formé est :", "o": ["Un noyau d’hélium 4", "Un noyau d’uranium 235", "Un noyau de carbone 14", "Un électron β−"], "a": 0, "e": "L’exemple produit un noyau d’hélium 4 et un neutron."}, {"q": "Dans l’exemple de fission, le noyau lourd utilisé est :", "o": ["Carbone 14", "Uranium 235", "Hélium 4", "Hydrogène 2"], "a": 1, "e": "Le cours donne la fission de l’uranium 235 par un neutron."}, {"q": "L’énergie d’une transformation nucléaire peut s’écrire :", "o": ["ΔE=[Σm_produits−Σm_réactifs]c²", "ΔE=[Σm_réactifs+Σm_produits]c", "ΔE=Σm/c²", "ΔE=mc"], "a": 0, "e": "C’est la première expression donnée dans le cours."}, {"q": "Une autre expression de l’énergie de transformation est :", "o": ["ΔE=ΣEl(réactifs)−ΣEl(produits)", "ΔE=ΣEl(produits)+ΣEl(réactifs)", "ΔE=El/A", "ΔE=λN"], "a": 0, "e": "Le cours donne la différence entre les énergies de liaison des réactifs et des produits."}, {"q": "L’énergie libérée par une réaction nucléaire vaut :", "o": ["ΔE signé", "|ΔE|", "ΔE²", "ΔE/c"], "a": 1, "e": "Le cours indique Elib=|ΔE|."}, {"q": "Dans une réaction nucléaire, les réactifs sont :", "o": ["Les espèces présentes au départ", "Les espèces obtenues à la fin", "Uniquement les photons", "Les noyaux stables finaux uniquement"], "a": 0, "e": "Les réactifs sont les espèces initiales de la transformation."}, {"q": "Dans une réaction nucléaire, les produits sont :", "o": ["Les espèces présentes au départ", "Les espèces obtenues après la transformation", "Les constantes physiques", "Les unités de masse"], "a": 1, "e": "Les produits sont les espèces formées."}, {"q": "Si la somme des masses des produits est inférieure à celle des réactifs, alors ΔE selon la formule du cours est :", "o": ["Positive", "Négative", "Nulle obligatoirement", "Impossible à déterminer"], "a": 1, "e": "ΔE=(Σm_produits−Σm_réactifs)c² : si la différence est négative, ΔE est négative."}, {"q": "La valeur absolue de ΔE permet de déterminer :", "o": ["L’énergie libérée selon la convention du cours", "Le nombre de protons", "La demi-vie", "La constante radioactive"], "a": 0, "e": "L’énergie libérée est donnée par |ΔE|."}, {"q": "Le symbole γ désigne :", "o": ["Un neutron", "Un rayonnement électromagnétique gamma", "Un positron", "Un noyau d’hélium"], "a": 1, "e": "γ est le rayonnement électromagnétique émis lors de la désexcitation."}, {"q": "Quel couple décrit correctement les isotopes ?", "o": ["Z identique, A différent", "A identique, Z différent", "A et Z toujours identiques", "Z différent, nombre de protons identique"], "a": 0, "e": "Même Z signifie même nombre de protons ; A différent implique un nombre de neutrons différent."}, {"q": "Si A=23 et Z=11, le nombre de neutrons est :", "o": ["11", "12", "23", "34"], "a": 1, "e": "N=A−Z=23−11=12."}, {"q": "Si un noyau a A=40 et Z=20, il contient :", "o": ["40 protons", "20 neutrons", "20 protons et 20 neutrons", "40 neutrons"], "a": 2, "e": "Z=20 protons et N=40−20=20 neutrons."}, {"q": "Un noyau ^A_ZX subit une désintégration alpha. Le noyau fils a pour nombres :", "o": ["A−4 et Z−2", "A−2 et Z−4", "A et Z+1", "A+4 et Z+2"], "a": 0, "e": "La particule alpha emporte 4 nucléons et 2 charges."}, {"q": "Un noyau ^A_ZX subit une désintégration β−. Le noyau fils a pour nombres :", "o": ["A−1 et Z−1", "A et Z+1", "A et Z−1", "A+1 et Z"], "a": 1, "e": "La désintégration β− conserve A et augmente Z de 1."}, {"q": "Un noyau ^A_ZX subit une désintégration β+. Le noyau fils a pour nombres :", "o": ["A et Z−1", "A et Z+1", "A−4 et Z−2", "A+1 et Z"], "a": 0, "e": "La désintégration β+ conserve A et diminue Z de 1."}, {"q": "La stabilité d’un noyau, selon le critère présenté, augmente avec :", "o": ["Son activité", "Son énergie de liaison par nucléon", "Sa constante radioactive", "Son nombre de désintégrations par seconde"], "a": 1, "e": "Le cours affirme qu’un noyau est d’autant plus stable que ξ est grande."}, {"q": "La demi-vie dépend de :", "o": ["La constante radioactive λ", "La masse du récipient", "La couleur de l’échantillon", "La température extérieure selon la formule du cours"], "a": 0, "e": "t1/2=ln2/λ."}, {"q": "Si N0=800 noyaux et qu’une demi-vie s’est écoulée, il reste :", "o": ["800", "600", "400", "200"], "a": 2, "e": "Après une demi-vie, N=N0/2=400."}, {"q": "Si N0=1200 noyaux et que deux demi-vies se sont écoulées, il reste :", "o": ["600", "300", "150", "100"], "a": 1, "e": "Après deux demi-vies, N=N0/4=300."}, {"q": "Si une activité initiale a0 vaut 1000 Bq, après une demi-vie elle vaut :", "o": ["1000 Bq", "750 Bq", "500 Bq", "250 Bq"], "a": 2, "e": "L’activité suit la même décroissance exponentielle et est divisée par deux après une demi-vie."}, {"q": "Quelle grandeur est exprimée en seconde dans le cours ?", "o": ["La constante radioactive λ", "La constante de temps τ", "Le numéro atomique Z", "L’énergie de liaison El"], "a": 1, "e": "τ et les durées, comme la demi-vie, s’expriment en secondes."}];
+let index = 0;
+let choices = Array(questions.length).fill(null);
+let checked = Array(questions.length).fill(false);
+let showReview = false;
+
+const $ = id => document.getElementById(id);
+function scoreNow(){
+  return questions.reduce((s,q,i)=>s+(checked[i] && choices[i]===q.a ? 1:0),0);
+}
+function render(){
+  const q=questions[index];
+  $('progressText').textContent=`Question ${index+1} sur ${questions.length}`;
+  $('scoreText').textContent=`Score : ${scoreNow()} / ${questions.length}`;
+  $('progressFill').style.width=`${((index+1)/questions.length)*100}%`;
+  $('qnumber').textContent=`QUESTION ${String(index+1).padStart(2,'0')} / ${questions.length}`;
+  $('question').textContent=q.q;
+  $('answers').innerHTML='';
+  q.o.forEach((option,j)=>{
+    const label=document.createElement('label');
+    label.className='answer'+(choices[index]===j?' selected':'');
+    if(checked[index] && j===q.a) label.classList.add('correct');
+    if(checked[index] && choices[index]===j && j!==q.a) label.classList.add('wrong');
+    const radio=document.createElement('input');
+    radio.type='radio'; radio.name='answer'; radio.value=j;
+    radio.checked=choices[index]===j; radio.disabled=checked[index];
+    radio.addEventListener('change',()=>{choices[index]=j;render();});
+    const span=document.createElement('span');
+    span.textContent=String.fromCharCode(65+j)+'. '+option;
+    label.append(radio,span); $('answers').append(label);
+  });
+  const fb=$('feedback');
+  fb.className='feedback';
+  if(checked[index]){
+    const ok=choices[index]===q.a;
+    fb.classList.add('show',ok?'good':'bad');
+    fb.innerHTML=`<strong>${ok?'Bonne réponse !':'Réponse incorrecte.'}</strong> ${q.e}<br><strong>Réponse attendue :</strong> ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}`;
+  }
+  $('prevBtn').disabled=index===0;
+  $('checkBtn').disabled=choices[index]===null || checked[index];
+  $('checkBtn').textContent=checked[index]?'Réponse validée':'Valider la réponse';
+  $('nextBtn').textContent=index===questions.length-1?'Terminer →':'Suivant →';
+  $('nextBtn').disabled=!checked[index];
+}
+$('checkBtn').addEventListener('click',()=>{
+  if(choices[index]===null)return;
+  checked[index]=true; render();
+});
+$('prevBtn').addEventListener('click',()=>{if(index>0){index--;render();}});
+$('nextBtn').addEventListener('click',()=>{
+  if(!checked[index])return;
+  if(index<questions.length-1){index++;render();}
+  else finish();
+});
+function finish(){
+  $('quiz').style.display='none'; $('result').style.display='block';
+  const score=scoreNow();
+  $('finalScore').textContent=`${score} / ${questions.length}`;
+  const pct=score/questions.length*100;
+  $('resultMessage').textContent=pct>=80?'Excellent travail ! Votre maîtrise du chapitre est très satisfaisante.':pct>=50?'Bon effort. Relisez les explications des questions à revoir.':'Continuez vos révisions et reprenez le QCM pour progresser.';
+  $('progressFill').style.width='100%';
+}
+$('reviewBtn').addEventListener('click',()=>{
+  const list=$('reviewList');
+  if(showReview){list.style.display='none';$('reviewBtn').textContent='Voir la correction détaillée';showReview=false;return;}
+  list.innerHTML='';
+  questions.forEach((q,i)=>{
+    const ok=choices[i]===q.a;
+    const div=document.createElement('div');div.className='review';
+    const title=document.createElement('strong');title.textContent=`${i+1}. ${q.q}`;
+    const status=document.createElement('span');status.className=ok?'ok':'no';
+    status.textContent=ok?'Votre réponse est correcte.':`Votre réponse : ${choices[i]===null?'Aucune réponse':q.o[choices[i]]}.`;
+    const correct=document.createElement('div');correct.textContent=`Bonne réponse : ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}`;
+    const exp=document.createElement('div');exp.textContent=q.e;
+    div.append(title,status,correct,exp);list.append(div);
+  });
+  list.style.display='block';$('reviewBtn').textContent='Masquer la correction';showReview=true;
+});
+$('restartBtn').addEventListener('click',()=>{
+  index=0;choices=Array(questions.length).fill(null);checked=Array(questions.length).fill(false);showReview=false;
+  $('quiz').style.display='block';$('result').style.display='none';$('reviewList').style.display='none';render();
+});
+render();
+</script>
+</body>
+</html>
